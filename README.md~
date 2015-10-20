@@ -1,3 +1,0 @@
-##Graph Utilities in CoffeeScript
-
-These files support [this app traversal animation utility](http://sunnysideworks.nyc/d3/directed_graph/). In partivular they are written to work with this [force-directed graph editor](http://bl.ocks.org/rkirsling/5001347), which imposes a data structure whereby the graph editor feeds the graph traversal functions an array of `nodes` and an array of `links`. 
