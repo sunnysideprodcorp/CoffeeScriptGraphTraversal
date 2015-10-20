@@ -11,7 +11,7 @@ nodes = [0...6]
 
 Here is the corresponding image of such a graph, when we ignore directionarlity:
 
-![graph plotted]
+![graph plotted](https://github.com/sunnysideprodcorp/CoffeeScript_GraphTraversal/blob/master/specificScreenshotWithWeights.png)
 
 Note that the code assumes both links and nodes are numbered starting from 0. For each link, you assign a weight as well as starting and ending vertices. For all the traversals included in these scripts, the `from` and `to` fields are meaningless in that the traversal algorithms ignore directionality.
 
