@@ -9,6 +9,10 @@ links = [{id: 0, to: 1, from:5, weight:99}, {id: 1, to: 1, from:2, weight:2},{id
 nodes = [0...6]
 ```
 
+Here is the corresponding image of such a graph, when we ignore directionarlity:
+
+![graph plotted]
+
 Note that the code assumes both links and nodes are numbered starting from 0. For each link, you assign a weight as well as starting and ending vertices. For all the traversals included in these scripts, the `from` and `to` fields are meaningless in that the traversal algorithms ignore directionality.
 
 Once you've got your `links` and `nodes` insantiate a `Graph` object like so:
