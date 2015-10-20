@@ -4,18 +4,12 @@ nodes = [0...6]
 graph = new Graph nodes, links
 console.log graph
 
+randomResult = randomTSP 5, graph
+console.log "Result of randomly searching for TSP solution optimized with this path: " + randomResult.path + " with a cost of " + randomResult.cost
+
+annealResult = annealTSP graph, randomResult.path
+console.log "Result of applying an annealing heuristic to the existing random result gives us this path: " + annealResult.path + " with a cost of " + annealResult.cost
 
 
-obj = randomTSP(1, graph)
-shortPath =  shortenPath obj.path
-console.log "\n\n\n testing with full path"+shortPath+"  "+obj.path
-console.log("TESTING"+obj.path + " is random solution with calc cost of " + obj.cost + " and a real cost of " + solutionCost obj.path, graph )
-console.log "\n\n\n testing with short"
-console.log(shortPath + " is random solution with calc cost of " + obj.cost + " and a real cost of " + solutionCost shortPath, graph)
-a = annealingTSP(graph, shortPath)
-console.log a.path+" is annealing result with cost "+a.cost+" and a verified cost of "+solutionCost a.path, graph
-a = localTSP(graph, shortPath)
-console.log a.path+" is local result with cost "+a.cost+" and a verified cost of "+solutionCost a.path, graph
-
-
-
+localResult = localTSP graph, randomResult.path
+console.log "Result of applying a local-search heuristic to the existing random result gives us this path: " + localResult.path + " with a cost of " + localResult.cost

@@ -46,5 +46,5 @@ cat graphClass.coffee helpers.coffee djikstra.coffee TSP_Heuristics.coffee testT
 Similarly, to combine all the files needed to run tree spanning algorithms, run the following Linux command:
 
 ```
-cat graphClass.coffee helpers.coffee djikstra.coffee TSP_Heuristics.coffee testTSP.coffee > total.coffee
+cat graphClass.coffee helpers.coffee SpanningTrees.coffee testSpanning.coffee > total.coffee
 ```

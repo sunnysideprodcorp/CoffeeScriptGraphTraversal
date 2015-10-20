@@ -1,3 +1,4 @@
+
 #
 # simulated annealing constants
 #
@@ -28,6 +29,7 @@ solutionCost = (currentSolution, graph) ->
        cost = 0
        for i in [0...(currentSolution.length-1)]
           cost += graph.dist([currentSolution[i], currentSolution[i+1]])
+          console.log "for distance from "+currentSolution[i]+ " to "+currentSolution[i+1]+" adding a cost of "+graph.dist([currentSolution[i], currentSolution[i+1]])
        return cost
 
 getIntermediateNodes = (current, next, parents) ->
@@ -56,21 +58,21 @@ getPair =  (currentSolution) ->
       i2 = pickRandom(currentSolution)
     return [i1, i2]
 
-transitionDelta = (graph, proposedSolution, node1, node2, position1, position2) ->
+transitionDelta = (proposedSolution, node1, node2, position1, position2) ->
   pairs = [[proposedSolution[Math.max(position1 - 1, 0)], node1], [node1, proposedSolution[Math.min(proposedSolution.length - 1, position1 + 1)]], [proposedSolution[Math.max(position2 - 1, 0)], node2], [node2, proposedSolution[Math.min(proposedSolution.length - 1, position2 + 1)]]];
   cost = 0
   for pair in pairs
-    cost +=  graph.dist pair
-  return cost
+    cost +=  graph.dist([pair[0], pair[1]])
+    return cost
 
 
-transition = (graph, proposedSolution, currentValue, swap1, swap2) ->
+transition = (proposedSolution, currentValue, swap1, swap2) ->
   trySolution = proposedSolution.slice(0)
   val1 = proposedSolution[swap1]
   val2 = proposedSolution[swap2]
-  beforeDelta = transitionDelta graph, trySolution, val1, val2, swap1, swap2
+  beforeDelta = transitionDelta(trySolution, val1, val2, swap1, swap2)
   swap trySolution, swap1, swap2
-  afterDelta = transitionDelta graph, trySolution, val2, val1, swap1, swap2
+  afterDelta = transitionDelta(trySolution, val2, val1, swap1, swap2)
   afterDelta - beforeDelta
 
 # picks and traverses vertices in an entirely random order. may double-traverse indices 
@@ -109,9 +111,12 @@ randomTSP = (numTrials, graph) ->
 
     return {cost : bestPathCost, path : bestPath} 
 
+console.log "\n\n\n\n\n\nNEW RUN"
+
+
 
 # following Skiena p 257
-annealTSP = (graph, proposedSolution) ->
+annealingTSP = (graph, proposedSolution) ->
     # setup for iteration
     currentSolution = proposedSolution
     currentValue = solutionCost currentSolution, graph
@@ -127,7 +132,7 @@ annealTSP = (graph, proposedSolution) ->
             i1 = swapPair[0]
             i2 = swapPair[1]
 
-            delta = transition graph, proposedSolution, currentValue, i1, i2
+            delta = transition proposedSolution, currentValue, i1, i2
             exponent = -1*delta/currentValue * Math.pow((K*temperature),-1)
             merit = Math.pow(E, exponent)
             flip = Math.random()
@@ -150,21 +155,32 @@ annealTSP = (graph, proposedSolution) ->
 localTSP = (graph, proposedSolution) ->
     # setup for iteration
     currentSolution = proposedSolution
-    currentValue = solutionCost currentSolution, graph
+    currentValue = solutionCost(currentSolution, graph)
     nodesToPick =  Object.keys(graph.nodesDir)
     counter = 0
     loop
        stuck = true
        for i in [1...graph.numNodes]
           for j in [1...graph.numNodes]
-             delta = transition graph, currentSolution, currentValue, i, j            
+             delta = transition currentSolution, currentValue, i, j            
              if delta < 0
                 stuck = false
                 swap currentSolution, i, j
-                currentValue =  solutionCost currentSolution, graph
+                currentValue =  solutionCost(currentSolution, graph)
              counter++
        
        break unless (not stuck) and (counter < 1)
 
     return {path : currentSolution, cost : currentValue}
    
+
+obj = randomTSP(1, graph)
+shortPath =  shortenPath obj.path
+console.log "\n\n\n testing with full path"
+console.log("TESTING"+obj.path + " is random solution with calc cost of " + obj.cost + " and a real cost of " + solutionCost obj.path, graph )
+console.log "\n\n\n testing with short"
+console.log(shortPath + " is random solution with calc cost of " + obj.cost + " and a real cost of " + solutionCost shortPath, graph)
+a = annealingTSP(graph, shortPath)
+console.log a.path+" is annealing result with cost "+a.cost+" and a verified cost of "+solutionCost a.path, graph 
+a = localTSP(graph, shortPath)
+console.log a.path+" is local result with cost "+a.cost+" and a verified cost of "+solutionCost a.path, graph
