@@ -30,7 +30,7 @@ console.log "edges in Kruskal minimum spanning tree are: " + results
 results = prim graph, startNode
 console.log "edges in Prim minimum spanning tree are: " + results + " starting from node " + startNode
 results = djikstra graph, startNode
-for i in [1...graph.length]
+for i in [1...graph.nodes.length]
     if i != startNode
         console.log "Djikstra results starting from node " + startNode + " to node " + i + "gives a minimum distance of " + results.distances[i] + " where the path back from " + i + " would first traverse " + results.parents[i] 
 ```
