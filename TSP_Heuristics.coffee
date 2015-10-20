@@ -1,5 +1,5 @@
 #
-# graph-related helpe- functions
+# graph-related helper functions
 #
 
 # translates full traversal path into path showing only 
@@ -74,6 +74,10 @@ transition = (graph, proposedSolution, currentValue, swap1, swap2) ->
   afterDelta = transitionDelta graph, trySolution, val2, val1, swap1, swap2
   afterDelta - beforeDelta
 
+#
+# random search heuristic 
+#
+
 # picks and traverses vertices in an entirely random order
 # if a node is traversed when getting between two other randomly traversed nodes, that node is also traversed then
 randomTSP = (numTrials, graph) ->
@@ -126,7 +130,7 @@ COOLING_FRACTION = .8
 K = .03
 E = 2.718
 
-# following Skiena p 257
+# Skiena p 257
 annealTSP = (graph, proposedSolution) ->
     # setup for iteration
     currentSolution = proposedSolution
@@ -159,16 +163,18 @@ annealTSP = (graph, proposedSolution) ->
 
 
 #
-# local Search
+# local search heuristic
 #
-# Skiena p 252
 
+# Skiena p 252
 localTSP = (graph, proposedSolution) ->
     # setup for iteration
     currentSolution = proposedSolution
     currentValue = solutionCost currentSolution, graph
-    nodesToPick =  Object.keys(graph.nodesDir)
     counter = 0
+
+    # loop through all single-swap possibilities until you can't find a swap possibility that lessens overall cost
+    # once you can't find such a possibility, you're done
     loop
        stuck = true
        for i in [1...graph.numNodes]
@@ -180,7 +186,7 @@ localTSP = (graph, proposedSolution) ->
                 currentValue =  solutionCost currentSolution, graph
              counter++
        
-       break unless (not stuck) and (counter < 1)
+       break unless (not stuck) and (counter < 1000000000) # cap with a counter in case users put in overly large numbers
 
     return {path : currentSolution, cost : currentValue}
    
