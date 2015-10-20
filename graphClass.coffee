@@ -88,7 +88,7 @@ class Graph
             @calcDjikstra from
             return @shortestPaths[from]
 
-   # in-place modifictions to shortestPaths and shortestPathsParents 
+   # in-place modifications to shortestPaths and shortestPathsParents 
    # called when a needed value has not yet been calculated
     calcDjikstra: (from) ->
         result = djikstra @, from
